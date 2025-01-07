@@ -2,6 +2,7 @@ import heapq
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
+from matplotlib.widgets import Button
 
 # Define the directions for moving in the grid (up, down, left, right)
 DIRECTIONS = [(0, 1), (1, 0), (0, -1), (-1, 0)]
@@ -135,6 +136,13 @@ def update_grid(event):
         last_pos = (x, y)
         visualize(grid, path, start, target)
 
+def clear_grid(event):
+    global grid, path, target
+    grid = create_grid(rows, cols)
+    path = []
+    target = None
+    visualize(grid, path, start, target)
+
 # Parameters
 rows, cols = 20, 20
 
@@ -144,10 +152,15 @@ grid = create_grid(rows, cols)
 # Create the plot
 fig, ax = plt.subplots()
 fig.canvas.manager.set_window_title('Dijkstra-Pathfinding Visualization')
-ax.set_title('Right-click to set walls, left-click to set your target')
 
 # Add instructions as text on the plot
-plt.figtext(0.5, 0.05, 'Right-click to set walls, left-click to set your target', ha='center', fontsize=10, color='blue')
+plt.figtext(0.5, 0.95, 'Left-click + drag for walls, right-click to set target', 
+            ha='center', fontsize=10, color='blue')
+
+# Add the CLEAR button
+button_ax = plt.axes([0.4, 0.01, 0.2, 0.05])  # [left, bottom, width, height]
+clear_button = Button(button_ax, 'CLEAR', color='lightgray', hovercolor='red')
+clear_button.on_clicked(clear_grid)
 
 fig.canvas.mpl_connect('button_press_event', on_mouse_press)
 fig.canvas.mpl_connect('button_release_event', on_mouse_release)
