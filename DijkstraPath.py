@@ -74,7 +74,10 @@ def on_mouse_press(event):
         drawing = True
         erasing = False
         setting_target = False
-        last_pos = (int(round(event.ydata)), int(round(event.xdata)))
+        if not event.ydata and not event.xdata:
+            last_pos = (0, 0)
+        else:
+            last_pos = (int(round(event.ydata)), int(round(event.xdata)))
         update_grid(event)
     elif event.button == 3:  # Right button
         setting_target = True
